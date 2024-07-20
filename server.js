@@ -3,14 +3,26 @@ import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 import bodyParser from 'body-parser';
-// import bcrypt from 'bcryptjs';
-// import CryptoJS from 'crypto-js';
+import bcrypt from 'bcryptjs';
+ import CryptoJS from 'crypto-js';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const server = express();
+
+const hashData = (data) => {
+    const hash = crypto.createHash('md5');
+    hash.update(data);
+    return hash.digest('hex');
+  };
+
+const comparePasswords = (inputPassword, storedHash) => {
+    const inputHash = hashData(inputPassword);
+    return inputHash === storedHash;
+  };
 
 server.use(express.json());
 server.use(bodyParser.json());
@@ -33,7 +45,86 @@ server.get('/', async (req, res) => {
     res.send("Welcome to my project");
 });
 
-const PORT = 4000;
+server.get('/home', async (req, res) => {
+    res.sendFile(path.join(__dirname,"views", "index.html"));
+});
+
+server.post('/signup', async (req, res) => {
+
+    console.log(req.body)
+    // const hack = JSON.parse(req.body.userData);
+    // hack.email = "hacker.gmail.com";
+    // const ud = JSON.stringify(hack);
+    // req.body.userData = ud;
+
+    console.log(req.body);
+    try {
+      const { email, password, signature, hash, userData } = req.body;  
+  
+      // Verify the integrity of the data
+      const dataHash = CryptoJS.HmacSHA256(userData, 'your-secret-key').toString(CryptoJS.enc.Hex);
+      if (dataHash !== signature) {
+        return res.status(400).json({ success: false, message: 'Data integrity check failed' });
+      }
+  
+      // Check if email already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ success: false, message: 'Email already in use' });
+      }
+  
+      // Hash the password
+    //   const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword= hashData(password);
+    console.log("md5 hash: " + hashedPassword);
+      
+      const jsonUser = JSON.parse(userData);
+      console.log(userData)
+      // Save the user
+      const newUser = new User({
+        // name: jsonUser.name,
+        email: jsonUser.email,
+        password: hashedPassword,
+        // phone: jsonUser.phone,
+        // address: jsonUser.address
+      });
+  
+      await newUser.save();
+  
+      res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+  });
+
+  server.post('/login', async (req, res) => {
+    console.log(req.body);
+    try {
+      const { email, password } = req.body;
+  
+      // Check if user exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ success: false, message: 'Invalid email or password' });
+      }
+  
+      // Verify password
+    //   const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch= comparePasswords(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ success: false, message: 'Invalid email or password' });
+      }
+  
+      res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  });
+
+
+const PORT = 4001;
 server.listen(PORT, () => {
     console.log("Server is listening at " + PORT);
 });

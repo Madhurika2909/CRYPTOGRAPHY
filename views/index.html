@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Coding by CodingLab || www.codinglabweb.com -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="style.css" />
     <!-- Unicons -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   </head>
   <body>
     <!-- Header -->
     <header class="header">
       <nav class="nav">
-        <a href="#" class="nav_logo">CodingLab</a>
+        <a href="#" class="nav_logo">CRYPTOGRAPHY PROJECT</a>
 
         <ul class="nav_items">
           <li class="nav_item">
@@ -36,15 +37,15 @@
         <i class="uil uil-times form_close"></i>
         <!-- Login Form -->
         <div class="form login_form">
-          <form action="#">
+          <form onsubmit="login(); return false;">
             <h2>Login</h2>
 
             <div class="input_box">
-              <input type="email" placeholder="Enter your email" required />
+              <input id="login-email" type="email" name="email" placeholder="Enter your email" required />
               <i class="uil uil-envelope-alt email"></i>
             </div>
             <div class="input_box">
-              <input type="password" placeholder="Enter your password" required />
+              <input id="login-password" type="password" name="password" placeholder="Enter your password" required />
               <i class="uil uil-lock password"></i>
               <i class="uil uil-eye-slash pw_hide"></i>
             </div>
@@ -57,7 +58,7 @@
               <a href="#" class="forgot_pw">Forgot password?</a>
             </div>
 
-            <button class="button">Login Now</button>
+            <button class="button" type="submit">Login Now</button>
 
             <div class="login_signup">Don't have an account? <a href="#" id="signup">Signup</a></div>
           </form>
@@ -65,15 +66,15 @@
 
         <!-- Signup Form -->
         <div class="form signup_form">
-          <form action="#">
+          <form onsubmit="signUp(); return false;">
             <h2>Signup</h2>
 
             <div class="input_box">
-              <input type="email" placeholder="Enter your email" required />
+              <input id="email" type="email" name="email" placeholder="Enter your email" required />
               <i class="uil uil-envelope-alt email"></i>
             </div>
             <div class="input_box">
-              <input type="password" placeholder="Create password" required />
+              <input id="password" type="password" name="password" placeholder="Create password" required />
               <i class="uil uil-lock password"></i>
               <i class="uil uil-eye-slash pw_hide"></i>
             </div>
@@ -83,7 +84,7 @@
               <i class="uil uil-eye-slash pw_hide"></i>
             </div>
 
-            <button class="button">Signup Now</button>
+            <button class="button" type="submit">Signup Now</button>
 
             <div class="login_signup">Already have an account? <a href="#" id="login">Login</a></div>
           </form>
