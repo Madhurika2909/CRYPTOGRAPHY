@@ -35,8 +35,11 @@ mongoose.connect('mongodb://localhost:27017/cryptography', {
 });
 
 const schema = new mongoose.Schema({
+    name: String,
     email: String,
     password: String,
+    address: String,
+    phone: String,
 });
 
 const User = mongoose.model('user', schema);
@@ -59,7 +62,7 @@ server.post('/signup', async (req, res) => {
 
     console.log(req.body);
     try {
-      const { email, password, signature, hash, userData } = req.body;  
+      const {name, email, password, address, phone, signature, hash, userData } = req.body;  
   
       // Verify the integrity of the data
       const dataHash = CryptoJS.HmacSHA256(userData, 'your-secret-key').toString(CryptoJS.enc.Hex);
@@ -82,12 +85,12 @@ server.post('/signup', async (req, res) => {
       console.log(userData)
       // Save the user
       const newUser = new User({
-        // name: jsonUser.name,
+        name: jsonUser.name,
         email: jsonUser.email,
         password: hashedPassword,
-        // phone: jsonUser.phone,
-        // address: jsonUser.address
-      });
+        phone: jsonUser.phone,
+        address: jsonUser.address
+      }); 
   
       await newUser.save();
   

@@ -145,7 +145,7 @@ a {
 
 .input_box {
   position: relative;
-  margin-top: 30px;
+  margin-top: 20px; /* Adjusted spacing */
   width: 100%;
   height: 40px;
 }
@@ -174,12 +174,18 @@ a {
 }
 
 .input_box i.email,
-.input_box i.password {
+.input_box i.password,
+.input_box i.name,
+.input_box i.address,
+.input_box i.phone {
   left: 0;
 }
 
 .input_box input:focus ~ i.email,
-.input_box input:focus ~ i.password {
+.input_box input:focus ~ i.password,
+.input_box input:focus ~ i.name,
+.input_box input:focus ~ i.address,
+.input_box input:focus ~ i.phone {
   color: #7d2ae8;
 }
 
@@ -234,4 +240,11 @@ a {
   font-size: 12px;
   text-align: center;
   margin-top: 15px;
+}
+
+/* New input fields styling */
+.input_box.name input,
+.input_box.address input,
+.input_box.phone input {
+  border-bottom: 1.5px solid #aaaaaa;
 }

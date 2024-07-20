@@ -68,11 +68,17 @@
         <div class="form signup_form">
           <form onsubmit="signUp(); return false;">
             <h2>Signup</h2>
+            
+            <div class="input_box name">
+              <input id="name" type="text" name="name" placeholder="Enter your name" required />
+              <i class="uil uil-user name"></i>
+            </div>
 
             <div class="input_box">
               <input id="email" type="email" name="email" placeholder="Enter your email" required />
               <i class="uil uil-envelope-alt email"></i>
             </div>
+
             <div class="input_box">
               <input id="password" type="password" name="password" placeholder="Create password" required />
               <i class="uil uil-lock password"></i>
@@ -83,6 +89,16 @@
               <i class="uil uil-lock password"></i>
               <i class="uil uil-eye-slash pw_hide"></i>
             </div>
+
+            <div class="input_box address">
+              <input id="address" type="text" name="address" placeholder="Enter your address" required />
+              <i class="uil uil-map-pin address"></i>
+            </div>
+
+            <div class="input_box phone">
+              <input id="phone" type="tel" name="phone" placeholder="Enter your phone number" required />
+              <i class="uil uil-phone phone"></i>
+            </div>            
 
             <button class="button" type="submit">Signup Now</button>
 

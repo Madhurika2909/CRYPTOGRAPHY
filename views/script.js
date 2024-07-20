@@ -46,14 +46,14 @@ const bufferToHex = (buffer) => {
 };
 
 const signUp = async () => {
-  //const name = document.getElementById('name').value;
+  const name = document.getElementById('name').value;
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
-  //const phone = document.getElementById('phone').value;
-  //const address = document.getElementById('address').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
 
   // Create a JSON object of the user data
-  const userData = JSON.stringify({ password, email });
+  const userData = JSON.stringify({ name,password, email,phone, address });
 
   // Hash user data using SHA-256
   const encoder = new TextEncoder();
@@ -69,8 +69,11 @@ const signUp = async () => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      name,
       email,
       password,
+      phone,
+      address,
       signature,
       hash: hashHex,
       userData
@@ -89,6 +92,7 @@ const signUp = async () => {
 const login = async () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
+
 
   // Send data to server
   const response = await fetch('/login', {
