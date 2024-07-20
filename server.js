@@ -13,6 +13,26 @@ const __dirname = path.dirname(__filename);
 
 const server = express();
 
+const algorithm = 'aes-256-cbc';
+const key = "mypasswith32chars>>AES_256_bytes";//crypto.randomBytes(32);
+const iv = crypto.randomBytes(16); //inicialization vector
+
+function encrypt(text) {
+ let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
+ let encrypted = cipher.update(text);
+ encrypted = Buffer.concat([encrypted, cipher.final()]);
+ return JSON.stringify({ iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') });
+}
+
+function decrypt(text) {
+ let iv = Buffer.from(text.iv, 'hex');
+ let encryptedText = Buffer.from(text.encryptedData, 'hex');
+ let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
+ let decrypted = decipher.update(encryptedText);
+ decrypted = Buffer.concat([decrypted, decipher.final()]);
+ return decrypted;
+}
+
 const hashData = (data) => {
     const hash = crypto.createHash('md5');
     hash.update(data);
@@ -53,14 +73,14 @@ server.get('/home', async (req, res) => {
 });
 
 server.post('/signup', async (req, res) => {
-
+    // Data Manipulation
     console.log(req.body)
     // const hack = JSON.parse(req.body.userData);
     // hack.email = "hacker.gmail.com";
     // const ud = JSON.stringify(hack);
     // req.body.userData = ud;
 
-    console.log(req.body);
+    //console.log(req.body);
     try {
       const {name, email, password, address, phone, signature, hash, userData } = req.body;  
   
@@ -80,16 +100,19 @@ server.post('/signup', async (req, res) => {
     //   const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword= hashData(password);
     console.log("md5 hash: " + hashedPassword);
+    const encryptName= encrypt(name);
+    const encryptAddress= encrypt(address);
+    const encryptPhone= encrypt(phone);
       
       const jsonUser = JSON.parse(userData);
       console.log(userData)
       // Save the user
       const newUser = new User({
-        name: jsonUser.name,
+        name: encryptName,
         email: jsonUser.email,
         password: hashedPassword,
-        phone: jsonUser.phone,
-        address: jsonUser.address
+        phone: encryptPhone,
+        address: encryptAddress
       }); 
   
       await newUser.save();
