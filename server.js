@@ -74,7 +74,6 @@ server.get('/home', async (req, res) => {
 
 server.post('/signup', async (req, res) => {
     // Data Manipulation
-    console.log(req.body)
     // const hack = JSON.parse(req.body.userData);
     // hack.email = "hacker.gmail.com";
     // const ud = JSON.stringify(hack);
@@ -82,10 +81,13 @@ server.post('/signup', async (req, res) => {
 
     //console.log(req.body);
     try {
-      const {name, email, password, address, phone, signature, hash, userData } = req.body;  
+      const {name, email, password, address, phone, signature, hash, userData } = req.body; 
+
+      console.log("Single string value received at the server: //" + userData + "//");
   
       // Verify the integrity of the data
       const dataHash = CryptoJS.HmacSHA256(userData, 'your-secret-key').toString(CryptoJS.enc.Hex);
+      
       if (dataHash !== signature) {
         return res.status(400).json({ success: false, message: 'Data integrity check failed' });
       }

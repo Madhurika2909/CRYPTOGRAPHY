@@ -55,14 +55,33 @@ const signUp = async () => {
   // Create a JSON object of the user data
   const userData = JSON.stringify({ name,password, email,phone, address });
 
-  // Hash user data using SHA-256
+  console.log("Single string data: //" + userData + "//");
+
+  // Hash user data
   const encoder = new TextEncoder();
   const data = encoder.encode(userData);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashHex = bufferToHex(hashBuffer);
 
+  console.log("Hashed single string: //" + hashHex + "//");
+
   // Generate a digital signature (use a secret key or your preferred method for signing)
   const signature = CryptoJS.HmacSHA256(userData, 'your-secret-key').toString(CryptoJS.enc.Hex);
+
+  console.log("Encrypted hash using AES key: //" + signature + "//");
+
+  const sendingData = JSON.stringify({
+    name,
+    email,
+    password,
+    phone,
+    address,
+    signature,
+    hash: hashHex,
+    userData
+  })
+
+  console.log("Data sent to the server by the client: //" + sendingData + "//");  
 
   // Send data to server
   const response = await fetch('/signup', {
