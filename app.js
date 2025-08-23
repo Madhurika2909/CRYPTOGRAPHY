@@ -54,7 +54,7 @@ server.use(express.static(path.join(__dirname, "public")));
 
 // Serve index.html on /
 server.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 mongoose.connect(process.env.MONGO_URI);
