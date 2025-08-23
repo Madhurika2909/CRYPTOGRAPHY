@@ -64,13 +64,14 @@ const schema = new mongoose.Schema({
 
 const User = mongoose.model('user', schema);
 
-server.get('/', async (req, res) => {
-  res.send("Welcome to my project");
-});
-
-server.get('/home', async (req, res) => {
+server.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
+
+
+// server.get('/home', async (req, res) => {
+//   res.sendFile(path.join(__dirname, "views", "index.html"));
+// });
 
 server.post('/signup', async (req, res) => {
   // Data Manipulation
@@ -153,6 +154,6 @@ server.post('/login', async (req, res) => {
 
 
 const PORT = process.env.PORT || 4001;
-server.listen(PORT, () => {
-  console.log("Server is listening at " + PORT);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log("Server is listening at " + PORT);
 });
