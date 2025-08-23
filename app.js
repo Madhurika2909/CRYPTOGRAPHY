@@ -49,7 +49,13 @@ const comparePasswords = (inputPassword, storedHash) => {
 server.use(express.json());
 server.use(bodyParser.json());
 
-server.use(express.static(path.join(__dirname, 'views')));
+// Serve static files from /public
+server.use(express.static(path.join(__dirname, "public")));
+
+// Serve index.html on /
+server.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+});
 
 mongoose.connect(process.env.MONGO_URI);
 
